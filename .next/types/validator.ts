@@ -59,12 +59,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   handler satisfies AppPageConfig<"/sign-up">
 }
 
-// Validate ../../app/(private routes)/@modal/(.)notes/[id]/page.tsx
-{
-  const handler = {} as typeof import("../../app/(private routes)/@modal/(.)notes/[id]/page.js")
-  handler satisfies AppPageConfig<"/notes/[id]">
-}
-
 // Validate ../../app/(private routes)/notes/[id]/page.tsx
 {
   const handler = {} as typeof import("../../app/(private routes)/notes/[id]/page.js")
@@ -99,6 +93,12 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   const handler = {} as typeof import("../../app/(private routes)/profile/page.js")
   handler satisfies AppPageConfig<"/profile">
+}
+
+// Validate ../../app/@modal/(.)notes/[id]/page.tsx
+{
+  const handler = {} as typeof import("../../app/@modal/(.)notes/[id]/page.js")
+  handler satisfies AppPageConfig<"/notes/[id]">
 }
 
 // Validate ../../app/page.tsx
