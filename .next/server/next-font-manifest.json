@@ -1,0 +1,19 @@
+{
+  "app": {
+    "[project]/app/(private routes)/profile/edit/page": [
+      "static/media/62d4b50592542c9f-s.p.682c4823.woff2",
+      "static/media/ce62453a442c7f35-s.p.a9507876.woff2"
+    ],
+    "[project]/app/_not-found/page": [
+      "static/media/62d4b50592542c9f-s.p.682c4823.woff2",
+      "static/media/ce62453a442c7f35-s.p.a9507876.woff2"
+    ],
+    "[project]/app/page": [
+      "static/media/62d4b50592542c9f-s.p.682c4823.woff2",
+      "static/media/ce62453a442c7f35-s.p.a9507876.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/marina/Projects/09-auth/app/%28private%20routes%29/notes/filter/%5B...slug%5D/error.tsx"],"sourcesContent":["'use client';\n\nexport default function NotesError({\n  error,\n  reset,\n}: {\n  error: Error & { digest?: string };\n  reset: () => void;\n}) {\n  return (\n    <>\n      <p>Could not fetch the list of notes. {error.message}</p>\n      <button onClick={() => reset()}>Try again</button>\n    </>\n  );\n}"],"names":[],"mappings":";;;;;AAAA;;AAEe,SAAS,WAAW,EACjC,KAAK,EACL,KAAK,EAIN;IACC,qBACE;;0BACE,8OAAC;;oBAAE;oBAAoC,MAAM,OAAO;;;;;;;0BACpD,8OAAC;gBAAO,SAAS,IAAM;0BAAS;;;;;;;;AAGtC","debugId":null}}]
+}
