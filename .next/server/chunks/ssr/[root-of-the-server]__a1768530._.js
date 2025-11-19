@@ -343,7 +343,7 @@ async function logout() {
 }
 async function checkSession() {
     const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["api"].get('/auth/session');
-    return data ?? null;
+    return data.success;
 }
 async function getMe() {
     const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["api"].get('/users/me');
@@ -557,10 +557,18 @@ function AuthProvider({ children }) {
         const verifySession = async ()=>{
             try {
                 setIsChecking(true);
-                const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["checkSession"])();
-                if (user) {
-                    if (!ignore) {
-                        setUser(user);
+                const hasSession = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["checkSession"])();
+                if (hasSession) {
+                    try {
+                        const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getMe"])();
+                        if (!ignore) {
+                            setUser(user);
+                        }
+                    } catch (error) {
+                        console.error('Failed to fetch user profile', error);
+                        if (!ignore) {
+                            clearIsAuthenticated();
+                        }
                     }
                 } else {
                     if (!ignore) {
@@ -581,7 +589,7 @@ function AuthProvider({ children }) {
                 }
             }
         };
-        verifySession();
+        void verifySession();
         return ()=>{
             ignore = true;
         };
@@ -599,12 +607,12 @@ function AuthProvider({ children }) {
                 children: "Checking authorization…"
             }, void 0, false, {
                 fileName: "[project]/components/AuthProvider/AuthProvider.tsx",
-                lineNumber: 75,
+                lineNumber: 85,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/AuthProvider/AuthProvider.tsx",
-            lineNumber: 74,
+            lineNumber: 84,
             columnNumber: 7
         }, this);
     }

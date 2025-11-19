@@ -129,7 +129,7 @@ async function checkSessionServer() {
             Cookie: cookieHeader
         } : undefined
     });
-    return data ?? null;
+    return data.success;
 }
 async function getMeServer() {
     const cookieHeader = await getCookieHeader();

@@ -59,14 +59,18 @@ export async function fetchNoteByIdServer(id: string): Promise<Note> {
 
 // ==== Auth (SSR) ====
 
-export async function checkSessionServer(): Promise<User | null> {
+interface SessionResponse {
+  success: boolean;
+}
+
+export async function checkSessionServer(): Promise<boolean> {
   const cookieHeader = await getCookieHeader();
 
-  const { data } = await api.get<User | null>('/auth/session', {
+  const { data } = await api.get<SessionResponse>('/auth/session', {
     headers: cookieHeader ? { Cookie: cookieHeader } : undefined,
   });
 
-  return data ?? null;
+  return data.success;
 }
 
 // ==== User profile (SSR) ====

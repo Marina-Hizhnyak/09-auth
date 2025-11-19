@@ -6,9 +6,8 @@ import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import Link from 'next/link';
 import NoteList from '@/components/NoteList/NoteList';
-import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query';
-import { fetchNotes } from '@/lib/api';
-import type { FetchNotesResponse } from '@/lib/api';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { fetchNotes, type FetchNotesResponse } from '@/lib/api/clientApi';
 import { useDebounce } from 'use-debounce';
 import type { NoteTag } from '@/types/note';
 
@@ -24,7 +23,6 @@ export default function NotesClient({ initialSearch, initialPage,  perPage, tag 
   const [currentPage, setCurrentPage] = useState<number>(initialPage ?? 1);
   const [debouncedSearch] = useDebounce(search, 300);
 
-  const queryClient = useQueryClient();
 
   const queryKey = useMemo(
     () =>
@@ -33,6 +31,7 @@ export default function NotesClient({ initialSearch, initialPage,  perPage, tag 
   );
 
   const { data, isLoading, isError, error } = useQuery<FetchNotesResponse>({
+    
     queryKey,
     queryFn: () =>
       fetchNotes({
@@ -44,7 +43,7 @@ export default function NotesClient({ initialSearch, initialPage,  perPage, tag 
     placeholderData: keepPreviousData,
   });
 
-
+console.log('notes data:', data);
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch]);
@@ -67,16 +66,18 @@ if (isLoading) {
   body = <NoteList notes={data.notes} />;
 }
 
+ const totalPages = data?.totalPages ?? 0;
+  
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
   
         <SearchBox value={search} onChange={setSearch} />
 
-        {data && data.totalPages > 1 && (
+        {data && totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
-            totalPages={data.totalPages}
+            totalPages={totalPages}
             onPageChange={setCurrentPage}
           />
         )}

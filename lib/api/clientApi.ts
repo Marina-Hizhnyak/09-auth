@@ -17,7 +17,7 @@ export interface FetchNotesParams {
 
 export interface FetchNotesResponse {
   notes: Note[];
-  total: number;
+  totalPages: number;  
 }
 
 export async function fetchNotes(
@@ -62,6 +62,10 @@ interface LoginDto {
   password: string;
 }
 
+interface SessionResponse {
+  success: boolean;
+}
+
 export async function register(body: RegisterDto): Promise<User> {
   const { data } = await api.post<User>('/auth/register', body);
   return data;
@@ -76,9 +80,10 @@ export async function logout(): Promise<void> {
   await api.post('/auth/logout');
 }
 
-export async function checkSession(): Promise<User | null> {
-  const { data } = await api.get<User | null>('/auth/session');
-  return data ?? null;
+
+export async function checkSession(): Promise<boolean> {
+  const { data } = await api.get<SessionResponse>('/auth/session');
+  return data.success;
 }
 
 // ==== User profile ====

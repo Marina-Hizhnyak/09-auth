@@ -1,10 +1,9 @@
-
 'use client';
 
 import { type ReactNode, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { checkSession, logout } from '@/lib/api/clientApi';
+import { checkSession, logout, getMe } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 
 import css from './AuthProvider.module.css';
@@ -34,13 +33,24 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       try {
         setIsChecking(true);
 
-        const user = await checkSession();
 
-        if (user) {
-          if (!ignore) {
-            setUser(user);
+        const hasSession = await checkSession();
+
+        if (hasSession) {
+
+          try {
+            const user = await getMe();
+            if (!ignore) {
+              setUser(user);
+            }
+          } catch (error) {
+            console.error('Failed to fetch user profile', error);
+            if (!ignore) {
+              clearIsAuthenticated();
+            }
           }
         } else {
+    
           if (!ignore) {
             clearIsAuthenticated();
           }
@@ -62,7 +72,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       }
     };
 
-    verifySession();
+    void verifySession();
 
     return () => {
       ignore = true;
