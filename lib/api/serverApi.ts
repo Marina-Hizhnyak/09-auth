@@ -1,6 +1,7 @@
 
 import { cookies } from 'next/headers';
 import { api } from './api';
+import type { AxiosResponse } from 'axios';
 import type { Note } from '@/types/note';
 import type { NoteTag } from '@/types/note';
 import type { User } from '@/types/user';
@@ -63,14 +64,16 @@ interface SessionResponse {
   success: boolean;
 }
 
-export async function checkSessionServer(): Promise<boolean> {
+export async function checkSessionServer(): Promise<
+  AxiosResponse<SessionResponse>
+> {
   const cookieHeader = await getCookieHeader();
 
-  const { data } = await api.get<SessionResponse>('/auth/session', {
+  const response = await api.get<SessionResponse>('/auth/session', {
     headers: cookieHeader ? { Cookie: cookieHeader } : undefined,
   });
 
-  return data.success;
+  return response;
 }
 
 // ==== User profile (SSR) ====

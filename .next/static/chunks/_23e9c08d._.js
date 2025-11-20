@@ -516,7 +516,6 @@ function AuthProvider(param) {
     let { children } = param;
     _s();
     const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"])();
-    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const { setUser, clearIsAuthenticated } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$store$2f$authStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuthStore"])();
     const [isChecking, setIsChecking] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
@@ -527,31 +526,21 @@ function AuthProvider(param) {
                     try {
                         setIsChecking(true);
                         const hasSession = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["checkSession"])();
-                        if (hasSession) {
-                            try {
-                                const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getMe"])();
-                                if (!ignore) {
-                                    setUser(user);
-                                }
-                            } catch (error) {
-                                console.error('Failed to fetch user profile', error);
-                                if (!ignore) {
-                                    clearIsAuthenticated();
-                                }
-                            }
-                        } else {
+                        if (!hasSession) {
                             if (!ignore) {
                                 clearIsAuthenticated();
                             }
-                            if (isPrivateRoute(pathname)) {
-                                try {
-                                    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["logout"])();
-                                } catch (e) {}
-                                router.push('/sign-in');
-                            }
+                            return;
+                        }
+                        const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2f$clientApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getMe"])();
+                        if (!ignore) {
+                            setUser(user);
                         }
                     } catch (error) {
-                        console.error('Session check failed', error);
+                        console.error('Session check or user fetch failed', error);
+                        if (!ignore) {
+                            clearIsAuthenticated();
+                        }
                     } finally{
                         if (!ignore) {
                             setIsChecking(false);
@@ -567,10 +556,8 @@ function AuthProvider(param) {
             })["AuthProvider.useEffect"];
         }
     }["AuthProvider.useEffect"], [
-        pathname,
         setUser,
-        clearIsAuthenticated,
-        router
+        clearIsAuthenticated
     ]);
     if (isChecking && isPrivateRoute(pathname)) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -580,12 +567,12 @@ function AuthProvider(param) {
                 children: "Checking authorization…"
             }, void 0, false, {
                 fileName: "[project]/components/AuthProvider/AuthProvider.tsx",
-                lineNumber: 85,
+                lineNumber: 73,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/AuthProvider/AuthProvider.tsx",
-            lineNumber: 84,
+            lineNumber: 72,
             columnNumber: 7
         }, this);
     }
@@ -593,10 +580,9 @@ function AuthProvider(param) {
         children: children
     }, void 0, false);
 }
-_s(AuthProvider, "KkJSfIornjBPzgj5LweFtJolDkk=", false, function() {
+_s(AuthProvider, "wrHZDGoNeJ9YiV+Kdf6T9adDZw8=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"],
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$store$2f$authStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuthStore"]
     ];
 });

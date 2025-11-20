@@ -1,4 +1,3 @@
-
 import {
   QueryClient,
   dehydrate,
@@ -7,10 +6,10 @@ import {
 import { fetchNoteByIdServer } from '@/lib/api/serverApi';
 import NotePreviewClient from './NotePreview.client';
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
 export default async function InterceptedNotePage({ params }: Props) {
-  const { id } = params;
+  const { id } = await params;
 
   const qc = new QueryClient();
 

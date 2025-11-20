@@ -3,16 +3,28 @@
   "middleware": {
     "/": {
       "files": [
-        "server/edge/chunks/_7d9b4a52._.js",
-        "server/edge/chunks/[root-of-the-server]__f2b15f93._.js",
-        "server/edge/chunks/turbopack-edge-wrapper_574eb55e.js"
+        "server/edge/chunks/_bf223eff._.js",
+        "server/edge/chunks/[root-of-the-server]__52b06eb8._.js",
+        "server/edge/chunks/turbopack-edge-wrapper_0ea67c85.js"
       ],
       "name": "middleware",
       "page": "/",
       "matchers": [
         {
-          "regexp": "/:nextData(_next/data/[^/]{1,})?/((?!_next/static|_next/image|favicon.ico).*){(\\\\.json)}?",
-          "originalSource": "/((?!_next/static|_next/image|favicon.ico).*)"
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/profile/:path*{(\\\\.json)}?",
+          "originalSource": "/profile/:path*"
+        },
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/notes/:path*{(\\\\.json)}?",
+          "originalSource": "/notes/:path*"
+        },
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/sign-in{(\\\\.json)}?",
+          "originalSource": "/sign-in"
+        },
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/sign-up{(\\\\.json)}?",
+          "originalSource": "/sign-up"
         }
       ],
       "wasm": [],
@@ -20,9 +32,9 @@
       "env": {
         "__NEXT_BUILD_ID": "development",
         "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "u4UMQWm38V0MMjekWwtiXCdeN5tuF/28E+udtJ905so=",
-        "__NEXT_PREVIEW_MODE_ID": "a23b8dc7fa03b726548c66f68378f409",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "bfa855addbaec606ebf212395b19fff1f74c04cb31402998c8aaa97d1699e0e3",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "9c7d67871aee483b94830df98e71ccc5e3f7ee85944bbf6524ab90ea145b2426"
+        "__NEXT_PREVIEW_MODE_ID": "dbffc26f1a497809e2a9f49efbf665e3",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "c5928fd30bdd9e0a7e741c94b6a6247808f281de8aa41da4970ae9a8ab39237b",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "ad0b6e0e2d0161fe6402bff66c48be7dafef2d2c925c5b418cb260c9510c9fa4"
       }
     }
   },

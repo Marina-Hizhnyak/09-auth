@@ -1,6 +1,6 @@
-
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { checkSessionServer } from '@/lib/api/serverApi';
 
 const AUTH_ROUTES = ['/sign-in', '/sign-up'];
 const PRIVATE_PREFIXES = ['/profile', '/notes'];
@@ -11,21 +11,26 @@ function isPrivateRoute(pathname: string) {
   );
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-
-  if (
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/_next') ||
-    pathname === '/favicon.ico'
-  ) {
-    return NextResponse.next();
-  }
-
-
   const accessToken = request.cookies.get('accessToken')?.value;
-  const isAuthenticated = Boolean(accessToken);
+  const refreshToken = request.cookies.get('refreshToken')?.value;
+
+  let isAuthenticated = Boolean(accessToken);
+
+
+  if (!isAuthenticated && refreshToken) {
+    try {
+      const response = await checkSessionServer(); 
+
+      if (response.data.success) {
+        isAuthenticated = true;
+      }
+    } catch {
+      isAuthenticated = false;
+    }
+  }
 
 
   if (!isAuthenticated && isPrivateRoute(pathname)) {
@@ -41,11 +46,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-
   return NextResponse.next();
 }
 
-
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/profile/:path*', '/notes/:path*', '/sign-in', '/sign-up'],
 };

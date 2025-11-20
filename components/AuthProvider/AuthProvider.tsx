@@ -1,9 +1,9 @@
 'use client';
 
 import { type ReactNode, useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
-import { checkSession, logout, getMe } from '@/lib/api/clientApi';
+import { checkSession, getMe } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 
 import css from './AuthProvider.module.css';
@@ -22,7 +22,6 @@ interface AuthProviderProps {
 
 export default function AuthProvider({ children }: AuthProviderProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const { setUser, clearIsAuthenticated } = useAuthStore();
   const [isChecking, setIsChecking] = useState(true);
 
@@ -33,38 +32,27 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       try {
         setIsChecking(true);
 
-
+      
         const hasSession = await checkSession();
 
-        if (hasSession) {
-
-          try {
-            const user = await getMe();
-            if (!ignore) {
-              setUser(user);
-            }
-          } catch (error) {
-            console.error('Failed to fetch user profile', error);
-            if (!ignore) {
-              clearIsAuthenticated();
-            }
-          }
-        } else {
-    
+        if (!hasSession) {
+     
           if (!ignore) {
             clearIsAuthenticated();
           }
+          return;
+        }
 
-          if (isPrivateRoute(pathname)) {
-            try {
-              await logout();
-            } catch {
-            }
-            router.push('/sign-in');
-          }
+     
+        const user = await getMe();
+        if (!ignore) {
+          setUser(user);
         }
       } catch (error) {
-        console.error('Session check failed', error);
+        console.error('Session check or user fetch failed', error);
+        if (!ignore) {
+          clearIsAuthenticated();
+        }
       } finally {
         if (!ignore) {
           setIsChecking(false);
@@ -77,7 +65,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     return () => {
       ignore = true;
     };
-  }, [pathname, setUser, clearIsAuthenticated, router]);
+  }, [setUser, clearIsAuthenticated]);
 
   if (isChecking && isPrivateRoute(pathname)) {
     return (
@@ -89,3 +77,4 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   return <>{children}</>;
 }
+
